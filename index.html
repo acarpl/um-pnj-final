@@ -3,21 +3,18 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simulasi UTBK-SNBT: D4 Rekayasa Keamanan Siber PNJ</title>
+<title>PNJ Cyber Security - Ultimate Prep Kit</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
 <style>
 :root {
-    --bg-dark: #0a0a0f;
-    --bg-card: #13131f;
-    --bg-code: #0d1117;
+    --bg-dark: #050507;
+    --bg-card: rgba(20, 20, 30, 0.7);
     --primary: #00f0ff;
-    --secondary: #7000ff;
+    --secondary: #bc13fe;
     --success: #00ff9d;
-    --danger: #ff0055;
-    --warning: #ffcc00;
     --text-main: #e0e0e0;
     --text-muted: #8b949e;
-    --border: #2d2d3a;
+    --border: rgba(255, 255, 255, 0.1);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -26,399 +23,353 @@ body {
     background-color: var(--bg-dark);
     color: var(--text-main);
     font-family: 'Inter', sans-serif;
-    line-height: 1.6;
+    min-height: 100vh;
     background-image: 
-        radial-gradient(circle at 10% 20%, rgba(112, 0, 255, 0.08) 0%, transparent 25%),
-        radial-gradient(circle at 90% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 25%);
+        radial-gradient(circle at 15% 50%, rgba(188, 19, 254, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.15), transparent 25%);
 }
 
-/* Timer Sticky Header */
-.timer-header {
-    position: sticky;
-    top: 0;
-    background: rgba(10, 10, 15, 0.95);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--border);
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    z-index: 100;
-}
-.timer-display {
-    font-family: 'Fira Code', monospace;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: var(--primary);
-    background: rgba(0, 240, 255, 0.1);
-    padding: 5px 15px;
-    border-radius: 8px;
-    border: 1px solid var(--primary);
-}
-.timer-display.warning { color: var(--warning); border-color: var(--warning); background: rgba(255, 204, 0, 0.1); }
-.timer-display.danger { color: var(--danger); border-color: var(--danger); background: rgba(255, 0, 85, 0.1); animation: pulse 1s infinite; }
+.container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
 
-@keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
-
-.container { max-width: 1000px; margin: 0 auto; padding: 30px 20px; }
-
-header { text-align: center; margin-bottom: 30px; }
+/* Header */
+header { text-align: center; margin-bottom: 40px; }
 h1 { 
-    font-size: 2rem; 
+    font-size: 2.5rem; 
     background: linear-gradient(90deg, var(--primary), var(--secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 10px;
 }
 
-/* Tabs */
-.tabs { display: flex; gap: 10px; margin-bottom: 30px; border-bottom: 1px solid var(--border); padding-bottom: 10px; flex-wrap: wrap; }
-.tab-btn {
-    background: transparent; border: 1px solid var(--border); color: var(--text-muted);
-    padding: 10px 20px; border-radius: 8px; cursor: pointer; font-family: 'Fira Code', monospace;
-    font-weight: 600; transition: all 0.3s ease;
+/* Navigation */
+.nav-pills {
+    display: flex; justify-content: center; gap: 15px; margin-bottom: 40px;
 }
-.tab-btn:hover { border-color: var(--primary); color: var(--primary); }
-.tab-btn.active { background: rgba(0, 240, 255, 0.1); border-color: var(--primary); color: var(--primary); }
+.nav-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    padding: 12px 25px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s;
+    backdrop-filter: blur(5px);
+}
+.nav-btn:hover { background: rgba(255, 255, 255, 0.1); color: white; }
+.nav-btn.active {
+    background: var(--primary);
+    color: var(--bg-dark);
+    border-color: var(--primary);
+    box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+}
 
-.section { display: none; animation: fadeIn 0.4s ease; }
+/* Sections */
+.section { display: none; animation: fadeIn 0.5s ease; }
 .section.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-/* Cards */
-.card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 25px; margin-bottom: 20px; }
-h2 { color: var(--primary); font-size: 1.2rem; margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
-h3 { color: var(--text-main); font-size: 1.05rem; margin: 15px 0 10px 0; }
-
+/* --- CHEATSHEET STYLES --- */
+.grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; }
+.card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 25px;
+    backdrop-filter: blur(10px);
+}
 .code-block {
-    background: var(--bg-code); border: 1px solid var(--border); border-radius: 8px;
-    padding: 15px; font-family: 'Fira Code', monospace; font-size: 0.9rem;
-    color: var(--success); position: relative; margin: 10px 0;
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 15px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    color: var(--success);
+    margin-top: 10px;
 }
-.code-block .comment { color: var(--text-muted); }
+.tag {
+    display: inline-block; padding: 4px 10px; border-radius: 6px;
+    font-size: 0.75rem; font-weight: 700; margin-bottom: 10px;
+}
+.tag-simak { background: rgba(188, 19, 254, 0.2); color: #d68aff; }
+.tag-utbk { background: rgba(0, 240, 255, 0.2); color: var(--primary); }
 
-/* Quiz Styles */
-.subtest-badge {
-    display: inline-block; padding: 4px 10px; border-radius: 20px;
-    font-size: 0.75rem; font-weight: 700; text-transform: uppercase;
-    margin-bottom: 10px; background: rgba(112, 0, 255, 0.2); color: #b388ff;
+/* --- FLASHCARD STYLES --- */
+.flashcard-container {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;
 }
-.question-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 20px; }
-.question-text { font-weight: 600; margin-bottom: 15px; color: var(--text-main); font-size: 1.05rem; }
-.options label {
-    display: block; padding: 12px 15px; margin-bottom: 8px; background: var(--bg-dark);
-    border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.2s;
+.flashcard {
+    background-color: transparent;
+    width: 100%; height: 250px;
+    perspective: 1000px;
+    cursor: pointer;
 }
-.options label:hover { border-color: var(--primary); background: rgba(0, 240, 255, 0.05); }
-.options input[type="radio"] { margin-right: 10px; accent-color: var(--primary); }
+.flashcard-inner {
+    position: relative; width: 100%; height: 100%;
+    text-align: center; transition: transform 0.6s;
+    transform-style: preserve-3d;
+    border-radius: 16px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+.flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+.flashcard-front, .flashcard-back {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden;
+    display: flex; align-items: center; justify-content: center;
+    flex-direction: column; padding: 20px;
+    border-radius: 16px; border: 1px solid var(--border);
+}
+.flashcard-front { background: var(--bg-card); color: var(--primary); }
+.flashcard-back { background: var(--primary); color: var(--bg-dark); transform: rotateY(180deg); }
+.flip-hint { font-size: 0.8rem; margin-top: 15px; opacity: 0.7; }
 
-.explanation {
-    display: none; margin-top: 15px; padding: 15px; background: rgba(0, 255, 157, 0.05);
-    border-left: 3px solid var(--success); border-radius: 0 8px 8px 0; font-size: 0.95rem; color: var(--text-muted);
+/* --- BRAIN GYM STYLES --- */
+.game-area {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    min-height: 400px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
 }
-.explanation.wrong { background: rgba(255, 0, 85, 0.05); border-left-color: var(--danger); }
+.stroop-word { font-size: 4rem; font-weight: 800; margin-bottom: 30px; text-transform: uppercase; }
+.color-btn-group { display: flex; gap: 15px; flex-wrap: wrap; justify-content: center; }
+.color-btn {
+    padding: 15px 30px; border: none; border-radius: 10px;
+    font-weight: bold; cursor: pointer; color: white;
+    font-size: 1.1rem; transition: transform 0.1s;
+}
+.color-btn:active { transform: scale(0.95); }
+.game-stats { margin-top: 20px; font-family: 'Fira Code', monospace; color: var(--text-muted); }
 
-.btn-primary {
-    background: linear-gradient(90deg, var(--secondary), var(--primary));
-    color: white; border: none; padding: 15px 30px; font-weight: 700;
-    border-radius: 8px; cursor: pointer; font-size: 1rem; width: 100%; margin-top: 20px;
-}
-.btn-primary:hover { opacity: 0.9; }
-
-.result-box {
-    text-align: center; padding: 30px; background: var(--bg-card);
-    border: 1px solid var(--primary); border-radius: 12px; margin-top: 30px; display: none;
-}
-.score-display { font-size: 3rem; font-weight: 800; color: var(--primary); }
-
-@media (max-width: 768px) {
-    .timer-header { flex-direction: column; gap: 10px; text-align: center; }
-    h1 { font-size: 1.5rem; }
-}
 </style>
 </head>
 <body>
 
-<div class="timer-header">
-    <div>
-        <strong style="color: var(--text-main);">SIMULASI UTBK-SNBT</strong>
-        <div style="font-size: 0.85rem; color: var(--text-muted);">D4 Rekayasa Keamanan Siber - PNJ</div>
-    </div>
-    <div class="timer-display" id="timer">180:00</div>
-</div>
-
 <div class="container">
     <header>
-        <h1>🛡️ Deep Dive Preparation Kit</h1>
-        <p style="color: var(--text-muted);">Materi terstruktur & Try Out sesuai kisi-kisi 7 Subtest Resmi (180 Menit)</p>
+        <h1>🧠 PNJ Ultimate Prep Kit</h1>
+        <p style="color: var(--text-muted);">Integrasi Materi SIMAK UI, UTBK, & Logika Siber</p>
     </header>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('materi')">📚 Strategi & Materi</button>
-        <button class="tab-btn" onclick="switchTab('tryout')">🎯 Simulasi Try Out</button>
+    <div class="nav-pills">
+        <button class="nav-btn active" onclick="switchTab('cheatsheet')">📚 Deep Dive Cheatsheet</button>
+        <button class="nav-btn" onclick="switchTab('flashcards')">⚡ Interactive Flashcards</button>
+        <button class="nav-btn" onclick="switchTab('braingym')">🎮 Brain Gym</button>
     </div>
 
-    <!-- TAB 1: MATERI -->
-    <div id="materi" class="section active">
-        <div class="card">
-            <h2>🧠 1. Kemampuan Penalaran Umum (25')</h2>
-            <p style="color:var(--text-muted); margin-bottom:10px;">Fokus: Silogisme, analogi, dan pola gambar.</p>
-            <div class="code-block">
-                <span class="comment">// Trik Silogisme:</span><br>
-                "Semua A adalah B" + "Sebagian B adalah C" = <strong>TIDAK DAPAT DISIMPULKAN</strong> hubungan A dan C.<br>
-                "Semua A adalah B" + "Semua B adalah C" = <strong>Semua A adalah C</strong>.
+    <!-- TAB 1: CHEATSHEET -->
+    <div id="cheatsheet" class="section active">
+        <div class="grid-2">
+            <div class="card">
+                <span class="tag tag-simak">SIMAK UI STYLE</span>
+                <h2>📐 Penalaran Matematika Lanjut</h2>
+                <p style="margin-bottom: 10px; color: var(--text-muted);">Materi tingkat lanjut untuk subtest kuantitatif.</p>
+                <div class="code-block">
+                    // Deret Aritmatika & Geometri<br>
+                    Un = a + (n-1)b<br>
+                    Sn = n/2 (2a + (n-1)b)<br><br>
+                    // Limit Fungsi Aljabar<br>
+                    Jika f(a) = 0/0, gunakan turunan (L'Hospital):<br>
+                    lim x->a f(x)/g(x) = f'(a)/g'(a)
+                </div>
             </div>
-        </div>
 
-        <div class="card">
-            <h2>📖 3. Kemampuan Memahami Bacaan & Menulis (15')</h2>
-            <p style="color:var(--text-muted); margin-bottom:10px;">Fokus: PUEBI, kalimat efektif, ide pokok.</p>
-            <div class="code-block">
-                <span class="comment">// Kesalahan Umum PUEBI:</span><br>
-                ❌ "Dia di suruh pergi." (di sebagai kata depan harus spasi, tapi ini imbuhan)<br>
-                ✅ "Dia disuruh pergi." (imbuhan, diserangkaikan)<br>
-                ❌ "Para hadirin sekalian"<br>
-                ✅ "Hadirin" atau "Para hadirin" (pilih satu, jangan pleonasme).
+            <div class="card">
+                <span class="tag tag-utbk">UTBK / SNBT</span>
+                <h2>📖 Literasi & PUEBI Kilat</h2>
+                <div class="code-block">
+                    // Kata Baku vs Tidak Baku<br>
+                    ❌ Aktifitas -> ✅ Aktivitas<br>
+                    ❌ Resiko -> ✅ Risiko<br>
+                    ❌ Analisa -> ✅ Analisis<br><br>
+                    // Tanda Baca<br>
+                    Gunakan koma sebelum kata penghubung pertentangan (tetapi, melainkan).
+                </div>
             </div>
-        </div>
 
-        <div class="card">
-            <h2>🔢 4. Pengetahuan Kuantitatif (20')</h2>
-            <p style="color:var(--text-muted); margin-bottom:10px;">Fokus: Aritmatika dasar, aljabar sederhana, statistika.</p>
-            <div class="code-block">
-                <span class="comment">// Konversi Biner ke Desimal (Penting untuk Cyber):</span><br>
-                1011₂ = (1×2³) + (0×2²) + (1×2¹) + (1×2⁰)<br>
-                = 8 + 0 + 2 + 1 = <strong>11</strong>
+            <div class="card">
+                <span class="tag tag-simak">LOGIKA SISIR</span>
+                <h2>🔍 Penalaran Umum & Silogisme</h2>
+                <ul style="padding-left: 20px; color: var(--text-muted); line-height: 1.8;">
+                    <li><strong>Kontraposisi:</strong> p → q ≡ ~q → ~p</li>
+                    <li><strong>Modus Ponens:</strong> p → q, p ∴ q</li>
+                    <li><strong>Modus Tollens:</strong> p → q, ~q ∴ ~p</li>
+                    <li><strong>Silogisme:</strong> Semua A=B, Sebagian B=C ∴ Sebagian A=C (Salah! Tidak dapat disimpulkan).</li>
+                </ul>
             </div>
-        </div>
 
-        <div class="card">
-            <h2>📐 7. Penalaran Matematika (40')</h2>
-            <p style="color:var(--text-muted); margin-bottom:10px;">Fokus: Pemecahan masalah kontekstual, peluang, barisan.</p>
-            <div class="code-block">
-                <span class="comment">// Rumus Peluang (Kombinasi):</span><br>
-                nCr = n! / (r!(n-r)!)<br>
-                Contoh: Memilih 2 server dari 5 server yang tersedia.<br>
-                5C2 = 5! / (2!(5-2)!) = (5×4) / (2×1) = <strong>10 cara</strong>.
+            <div class="card">
+                <span class="tag tag-utbk">CYBER CONTEXT</span>
+                <h2>🛡️ Istilah Wajib D4 Siber</h2>
+                <div class="code-block">
+                    CIA Triad:<br>
+                    1. Confidentiality (Kerahasiaan)<br>
+                    2. Integrity (Keutuhan data)<br>
+                    3. Availability (Ketersediaan layanan)<br><br>
+                    Malware Types:<br>
+                    Virus, Worm, Trojan, Ransomware, Spyware.
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- TAB 2: TRY OUT -->
-    <div id="tryout" class="section">
-        <form id="quizForm">
-            <div id="quizContainer"></div>
-            <button type="button" class="btn-primary" onclick="submitQuiz()">🚀 Selesaikan & Lihat Pembahasan</button>
-        </form>
-        
-        <div class="result-box" id="resultBox">
-            <h3>Hasil Simulasi</h3>
-            <div class="score-display" id="scoreDisplay">0/0</div>
-            <p id="scoreMessage" style="color: var(--text-muted); margin-top: 10px;"></p>
-            <button class="btn-primary" style="width: auto; margin-top: 20px;" onclick="resetQuiz()">🔄 Ulangi Simulasi</button>
+    <!-- TAB 2: FLASHCARDS -->
+    <div id="flashcards" class="section">
+        <div class="flashcard-container">
+            <!-- Card 1 -->
+            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3>Turunan xⁿ</h3>
+                        <p class="flip-hint">Klik untuk melihat jawaban</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <h2>nxⁿ⁻¹</h2>
+                        <p>(Aturan Pangkat Dasar)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3>Hukum Ohm</h3>
+                        <p class="flip-hint">Klik untuk melihat jawaban</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <h2>V = I × R</h2>
+                        <p>(Tegangan = Arus × Hambatan)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3>Invers Matriks 2x2</h3>
+                        <p class="flip-hint">Klik untuk melihat jawaban</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <h2>1/det(A) × [d -b; -c a]</h2>
+                        <p>(Tukar diagonal utama, ubah tanda diagonal samping)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4 -->
+            <div class="flashcard" onclick="this.classList.toggle('flipped')">
+                <div class="flashcard-inner">
+                    <div class="flashcard-front">
+                        <h3>Phishing</h3>
+                        <p class="flip-hint">Klik untuk melihat jawaban</p>
+                    </div>
+                    <div class="flashcard-back">
+                        <h2>Penipuan Digital</h2>
+                        <p>Upaya mencuri data sensitif dengan menyamar sebagai pihak tepercaya.</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
+    <!-- TAB 3: BRAIN GYM -->
+    <div id="braingym" class="section">
+        <div class="game-area">
+            <h2 style="margin-bottom: 20px;">🎨 Stroop Effect Challenge</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px;">Pilih tombol sesuai dengan <strong>WARNA TULISAN</strong>, bukan artinya!</p>
+            
+            <div class="stroop-word" id="stroopWord">READY?</div>
+            
+            <div class="color-btn-group">
+                <button class="color-btn" style="background: #ff0055;" onclick="checkStroop('red')">MERAH</button>
+                <button class="color-btn" style="background: #00f0ff;" onclick="checkStroop('blue')">BIRU</button>
+                <button class="color-btn" style="background: #00ff9d;" onclick="checkStroop('green')">HIJAU</button>
+                <button class="color-btn" style="background: #ffcc00;" onclick="checkStroop('yellow')">KUNING</button>
+            </div>
+
+            <div class="game-stats">
+                Score: <span id="score" style="color: var(--primary);">0</span> | Time: <span id="timeLeft">30</span>s
+            </div>
+            <button class="nav-btn" style="margin-top: 20px;" onclick="startGame()">Start Game</button>
+        </div>
+    </div>
+
 </div>
 
 <script>
-// --- TIMER LOGIC (180 Menit) ---
-let timeRemaining = 180 * 60; // 180 menit dalam detik
-let timerInterval;
-
-function startTimer() {
-    clearInterval(timerInterval);
-    timerInterval = setInterval(() => {
-        timeRemaining--;
-        const minutes = Math.floor(timeRemaining / 60);
-        const seconds = timeRemaining % 60;
-        const display = document.getElementById('timer');
-        display.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        
-        // Visual warning
-        display.classList.remove('warning', 'danger');
-        if (timeRemaining <= 300) display.classList.add('danger'); // < 5 menit
-        else if (timeRemaining <= 900) display.classList.add('warning'); // < 15 menit
-
-        if (timeRemaining <= 0) {
-            clearInterval(timerInterval);
-            alert("⏰ Waktu Habis! Jawaban akan otomatis dikumpulkan.");
-            submitQuiz();
-        }
-    }, 1000);
-}
-
-// --- DATA SOAL (Representasi 7 Subtest dengan Konteks Cyber) ---
-const quizData = [
-    {
-        subtest: "1. Penalaran Umum",
-        q: "Semua administrator jaringan memahami protokol TCP/IP. Sebagian orang yang memahami protokol TCP/IP adalah mahasiswa PNJ. Budi adalah administrator jaringan. Kesimpulan yang paling tepat adalah...",
-        options: [
-            "Budi adalah mahasiswa PNJ.",
-            "Budi memahami protokol TCP/IP.",
-            "Sebagian administrator jaringan adalah mahasiswa PNJ.",
-            "Tidak dapat ditarik kesimpulan tentang Budi dan mahasiswa PNJ."
-        ],
-        answer: 1,
-        explanation: "Premis 1: Semua Admin -> Paham TCP/IP. Budi adalah Admin, maka Budi pasti Paham TCP/IP. Hubungan Budi dengan 'mahasiswa PNJ' tidak bisa dipastikan karena premis 2 hanya menyatakan 'sebagian'."
-    },
-    {
-        subtest: "2. Pengetahuan & Kemampuan Umum",
-        q: "Undang-Undang di Indonesia yang secara khusus mengatur tentang informasi dan transaksi elektronik, termasuk kejahatan siber, adalah...",
-        options: ["UU No. 19 Tahun 2016", "UU No. 11 Tahun 2008 (dan perubahannya)", "UU No. 27 Tahun 2022", "UU No. 8 Tahun 1999"],
-        answer: 1,
-        explanation: "UU ITE yang menjadi dasar utama adalah UU No. 11 Tahun 2008, yang kemudian diubah dengan UU No. 19 Tahun 2016."
-    },
-    {
-        subtest: "3. Memahami Bacaan & Menulis",
-        q: "Manakah kalimat berikut yang sesuai dengan kaidah PUEBI (ejaan yang disempurnakan)?",
-        options: [
-            "Para hacker-hacker sedang mencoba membobol server.",
-            "Mereka sedang melakukan di-coding ulang terhadap sistem.",
-            "Keamanan siber merupakan hal yang sangat penting di era digital.",
-            "Software tersebut harus di update secara berkala."
-        ],
-        answer: 2,
-        explanation: "A salah (pleonasme, cukup 'para hacker' atau 'hacker-hacker'). B salah (imbuhan 'di-' pada kata asing seharusnya digabung atau diitalik, lebih baik 'dikoding'). D salah ('diupdate' harus diserangkaikan karena 'di-' sebagai imbuhan)."
-    },
-    {
-        subtest: "4. Pengetahuan Kuantitatif",
-        q: "Jika sebuah password direpresentasikan dalam bilangan biner '1101', berapakah nilai desimal dari password tersebut?",
-        options: ["11", "13", "15", "14"],
-        answer: 1,
-        explanation: "1101₂ = (1×2³) + (1×2²) + (0×2¹) + (1×2⁰) = 8 + 4 + 0 + 1 = 13."
-    },
-    {
-        subtest: "5. Literasi dalam Bahasa Indonesia",
-        q: "Bacalah teks berikut: 'Phishing adalah upaya penipuan untuk memperoleh informasi sensitif seperti kata sandi dan detail kartu kredit dengan menyamar sebagai entitas yang tepercaya dalam komunikasi elektronik.' Ide pokok teks tersebut adalah...",
-        options: [
-            "Cara membuat kata sandi yang aman.",
-            "Definisi dan tujuan dari serangan phishing.",
-            "Bahaya penggunaan kartu kredit di internet.",
-            "Sejarah komunikasi elektronik."
-        ],
-        answer: 1,
-        explanation: "Teks tersebut secara eksplisit menjelaskan apa itu 'Phishing' (upaya penipuan) dan tujuannya (memperoleh informasi sensitif)."
-    },
-    {
-        subtest: "6. Literasi dalam Bahasa Inggris",
-        q: "Read the text: 'Ransomware is a type of malicious software that encrypts a victim's files. The attacker then demands a ransom from the victim to restore access to the data upon payment.' What is the main idea of the text?",
-        options: [
-            "How to create malicious software.",
-            "The definition and mechanism of ransomware attacks.",
-            "The history of data encryption.",
-            "How to pay a ransom safely."
-        ],
-        answer: 1,
-        explanation: "The text explains what ransomware is (malicious software that encrypts files) and how it works (demanding a ransom for decryption key)."
-    },
-    {
-        subtest: "7. Penalaran Matematika",
-        q: "Sebuah sistem keamanan membutuhkan PIN 4 digit. Jika angka yang boleh digunakan hanya 1, 2, 3, 4, 5 dan angka tidak boleh berulang, berapa banyak kemungkinan PIN yang dapat dibuat?",
-        options: ["120", "625", "24", "125"],
-        answer: 0,
-        explanation: "Ini adalah masalah Permutasi (urutan penting, tidak ada pengulangan). Memilih 4 angka dari 5 angka tersedia: 5P4 = 5! / (5-4)! = 5 × 4 × 3 × 2 = 120 kemungkinan."
-    }
-];
-
-// --- FUNGSI RENDER QUIZ ---
-function renderQuiz() {
-    const container = document.getElementById('quizContainer');
-    container.innerHTML = '';
-    
-    quizData.forEach((item, index) => {
-        const qDiv = document.createElement('div');
-        qDiv.className = 'question-card';
-        
-        let optionsHtml = '';
-        item.options.forEach((opt, optIndex) => {
-            optionsHtml += `
-                <label>
-                    <input type="radio" name="q${index}" value="${optIndex}">
-                    ${opt}
-                </label>
-            `;
-        });
-
-        qDiv.innerHTML = `
-            <span class="subtest-badge">${item.subtest}</span>
-            <div class="question-text">${index + 1}. ${item.q}</div>
-            <div class="options">${optionsHtml}</div>
-            <div class="explanation" id="exp${index}">
-                <strong>💡 Pembahasan Deep Dive:</strong><br>${item.explanation}
-            </div>
-        `;
-        container.appendChild(qDiv);
-    });
-}
-
-// --- FUNGSI SUBMIT & HITUNG ---
-function submitQuiz() {
-    clearInterval(timerInterval); // Hentikan timer
-    let score = 0;
-    let answeredAll = true;
-
-    quizData.forEach((item, index) => {
-        const selected = document.querySelector(`input[name="q${index}"]:checked`);
-        const expDiv = document.getElementById(`exp${index}`);
-        
-        if (!selected) {
-            answeredAll = false;
-        } else {
-            if (parseInt(selected.value) === item.answer) {
-                score++;
-                expDiv.style.display = 'block';
-                expDiv.className = 'explanation'; 
-            } else {
-                expDiv.style.display = 'block';
-                expDiv.className = 'explanation wrong'; 
-            }
-        }
-    });
-
-    if (!answeredAll) {
-        const confirmSubmit = confirm("⚠️ Ada soal yang belum dijawab. Yakin ingin mengumpulkan?");
-        if (!confirmSubmit) {
-            startTimer(); // Lanjutkan timer jika batal
-            return;
-        }
-    }
-
-    // Tampilkan Hasil
-    const resultBox = document.getElementById('resultBox');
-    const scoreDisplay = document.getElementById('scoreDisplay');
-    const scoreMessage = document.getElementById('scoreMessage');
-    
-    resultBox.style.display = 'block';
-    scoreDisplay.innerText = `${score} / ${quizData.length}`;
-    
-    const percentage = (score / quizData.length) * 100;
-    if (percentage >= 80) scoreMessage.innerText = "🔥 Luar biasa! Pemahaman konsep dan literasi kamu sangat kuat untuk jurusan ini.";
-    else if (percentage >= 60) scoreMessage.innerText = "👍 Cukup baik. Tingkatkan lagi kecepatan membaca dan ketelitian di subtest kuantitatif.";
-    else scoreMessage.innerText = "📚 Perlu belajar lebih dalam. Fokus pada pemahaman konsep dasar logika dan literasi bahasa.";
-
-    resultBox.scrollIntoView({ behavior: 'smooth' });
-}
-
-function resetQuiz() {
-    document.getElementById('quizForm').reset();
-    document.getElementById('resultBox').style.display = 'none';
-    document.querySelectorAll('.explanation').forEach(el => el.style.display = 'none');
-    timeRemaining = 180 * 60;
-    startTimer();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
+// --- TAB LOGIC ---
 function switchTab(tabId) {
     document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
     
     document.getElementById(tabId).classList.add('active');
     event.target.classList.add('active');
 }
 
-// Inisialisasi
-renderQuiz();
-startTimer();
+// --- BRAIN GYM: STROOP EFFECT ---
+let score = 0;
+let timeLeft = 30;
+let gameInterval;
+let currentColor = '';
+
+const colors = [
+    { name: 'MERAH', code: '#ff0055', val: 'red' },
+    { name: 'BIRU', code: '#00f0ff', val: 'blue' },
+    { name: 'HIJAU', code: '#00ff9d', val: 'green' },
+    { name: 'KUNING', code: '#ffcc00', val: 'yellow' }
+];
+
+function startGame() {
+    score = 0;
+    timeLeft = 30;
+    document.getElementById('score').innerText = score;
+    document.getElementById('timeLeft').innerText = timeLeft;
+    nextRound();
+    
+    clearInterval(gameInterval);
+    gameInterval = setInterval(() => {
+        timeLeft--;
+        document.getElementById('timeLeft').innerText = timeLeft;
+        if(timeLeft <= 0) {
+            clearInterval(gameInterval);
+            document.getElementById('stroopWord').innerText = "GAME OVER";
+            document.getElementById('stroopWord').style.color = "white";
+            alert(`Waktu habis! Skor akhir kamu: ${score}`);
+        }
+    }, 1000);
+}
+
+function nextRound() {
+    const wordObj = colors[Math.floor(Math.random() * colors.length)];
+    const colorObj = colors[Math.floor(Math.random() * colors.length)];
+    
+    currentColor = colorObj.val;
+    
+    const wordEl = document.getElementById('stroopWord');
+    wordEl.innerText = wordObj.name;
+    wordEl.style.color = colorObj.code;
+}
+
+function checkStroop(selectedVal) {
+    if(timeLeft <= 0) return;
+    
+    if(selectedVal === currentColor) {
+        score += 10;
+        document.getElementById('score').innerText = score;
+        nextRound();
+    } else {
+        score = Math.max(0, score - 5);
+        document.getElementById('score').innerText = score;
+        // Efek getar jika salah
+        document.querySelector('.game-area').style.transform = "translateX(5px)";
+        setTimeout(() => document.querySelector('.game-area').style.transform = "translateX(0)", 100);
+    }
+}
 </script>
 
 </body>
