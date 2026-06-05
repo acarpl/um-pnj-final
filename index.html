@@ -3,439 +3,273 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduPrep Pro - Platform Belajar Mandiri</title>
+    <title>Massive Try Out - PNJ Cyber Security</title>
     
     <!-- React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    
-    <!-- Babel for JSX -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
-
     <style>
-        body { font-family: 'Inter', sans-serif; }
-        .font-mono { font-family: 'Fira Code', monospace; }
-        
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-
-        /* Flip Card Animation */
-        .perspective-1000 { perspective: 1000px; }
-        .transform-style-3d { transform-style: preserve-3d; }
-        .backface-hidden { backface-visibility: hidden; }
-        .rotate-y-180 { transform: rotateY(180deg); }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased">
+<body class="text-slate-800 h-screen overflow-hidden">
     <div id="root"></div>
 
     <script type="text/babel">
         const { useState, useEffect } = React;
 
-        // --- DATA DUMMY (MATERI UJIAN POLITEKNIK) ---
-        const MATERIALS = [
-            {
-                id: 1,
-                title: "Matematika Dasar: Logaritma",
-                category: "Matematika",
-                cheatSheet: [
-                    { label: "Definisi", value: "a^c = b ↔ log_a(b) = c" },
-                    { label: "Sifat Perkalian", value: "log_a(b) + log_a(c) = log_a(bc)" },
-                    { label: "Sifat Pangkat", value: "log_a(b^n) = n · log_a(b)" }
-                ],
-                content: `
-                    <h3>Konsep Dasar Logaritma</h3>
-                    <p>Logaritma adalah operasi matematika yang merupakan kebalikan dari eksponen atau pemangkatan. Dalam konteks ujian masuk politeknik, pemahaman sifat-sifat logaritma sangat krusial untuk menyederhanakan persamaan kompleks.</p>
-                    
-                    <h3>Aplikasi dalam Teknik</h3>
-                    <p>Dalam rekayasa keamanan siber dan jaringan, logaritma digunakan dalam perhitungan kompleksitas algoritma (Big O Notation) dan skala desibel pada sinyal.</p>
-                    
-                    <blockquote class="border-l-4 border-blue-500 pl-4 italic my-4 text-slate-600">
-                        "Ingat! Basis logaritma harus selalu positif dan tidak sama dengan 1."
-                    </blockquote>
-                `
-            },
-            {
-                id: 2,
-                title: "Fisika: Hukum Newton",
-                category: "Fisika",
-                cheatSheet: [
-                    { label: "Hukum I", value: "ΣF = 0 (Benda diam/GLB)" },
-                    { label: "Hukum II", value: "ΣF = m · a" },
-                    { label: "Hukum III", value: "F_aksi = -F_reaksi" }
-                ],
-                content: `
-                    <h3>Dinamika Gerak</h3>
-                    <p>Hukum Newton menjadi dasar dari hampir semua perhitungan mekanika teknik. Pemahaman tentang gaya normal, gesek, dan tegangan tali adalah kunci menyelesaikan soal cerita fisika.</p>
-                    <p>Pastikan Anda selalu menggambar <strong>Diagram Bebas (Free Body Diagram)</strong> sebelum memulai perhitungan.</p>
-                `
-            }
+        // --- BANK SOAL MASSIVE (35 SOAL) ---
+        const QUESTION_BANK = [
+            // MATEMATIKA DASAR & LANJUT
+            { id: 1, cat: "Matematika", q: "Nilai dari log 2 + log 5 adalah...", opts: ["0", "1", "2", "7", "10"], ans: 1, exp: "log 2 + log 5 = log (2x5) = log 10 = 1." },
+            { id: 2, cat: "Matematika", q: "Turunan pertama dari f(x) = 3x² - 4x + 5 adalah...", opts: ["6x - 4", "6x + 4", "3x - 4", "6x", "x - 4"], ans: 0, exp: "Turunan ax^n = anx^(n-1). Jadi 3(2x) - 4(1) + 0 = 6x - 4." },
+            { id: 3, cat: "Matematika", q: "Jika 2x - 5 = 11, maka nilai x adalah...", opts: ["3", "6", "8", "9", "12"], ans: 2, exp: "2x = 11 + 5 → 2x = 16 → x = 8." },
+            { id: 4, cat: "Matematika", q: "Hasil dari ∫ 2x dx adalah...", opts: ["x² + C", "2x² + C", "x + C", "2 + C", "x³ + C"], ans: 0, exp: "Integral x^n dx = (1/(n+1))x^(n+1). Jadi (2/2)x² = x² + C." },
+            { id: 5, cat: "Matematika", q: "Matriks A = [[1, 2], [3, 4]]. Determinan A adalah...", opts: ["-2", "2", "-10", "10", "0"], ans: 0, exp: "Det = (1)(4) - (2)(3) = 4 - 6 = -2." },
+            { id: 6, cat: "Matematika", q: "Suku ke-10 dari deret aritmatika 2, 5, 8, ... adalah...", opts: ["27", "29", "30", "32", "35"], ans: 1, exp: "Un = a + (n-1)b. U10 = 2 + (9)(3) = 2 + 27 = 29." },
+            { id: 7, cat: "Matematika", q: "Nilai dari sin 30° adalah...", opts: ["0", "0.5", "1", "√3/2", "√2/2"], ans: 1, exp: "Sin 30° adalah setengah dari sisi miring, yaitu 0.5 atau 1/2." },
+            
+            // FISIKA
+            { id: 8, cat: "Fisika", q: "Sebuah benda bergerak dengan kecepatan tetap 10 m/s selama 5 detik. Jarak tempuhnya adalah...", opts: ["2 m", "15 m", "50 m", "500 m", "0.5 m"], ans: 2, exp: "s = v × t = 10 × 5 = 50 meter." },
+            { id: 9, cat: "Fisika", q: "Hukum Ohm menyatakan hubungan antara...", opts: ["Gaya dan Massa", "Tegangan, Arus, Hambatan", "Usaha dan Waktu", "Massa dan Energi", "Tekanan dan Volume"], ans: 1, exp: "V = I × R (Tegangan = Arus × Hambatan)." },
+            { id: 10, cat: "Fisika", q: "Satuan dari Gaya dalam SI adalah...", opts: ["Joule", "Watt", "Newton", "Pascal", "Ampere"], ans: 2, exp: "Satuan gaya adalah Newton (N)." },
+            { id: 11, cat: "Fisika", q: "Energi kinetik sebuah benda bergantung pada...", opts: ["Ketinggian", "Massa dan Kecepatan", "Waktu", "Suhu", "Volume"], ans: 1, exp: "Ek = ½ mv². Bergantung pada massa (m) dan kecepatan (v)." },
+            { id: 12, cat: "Fisika", q: "Jika sebuah cermin cembung memiliki jari-jari 20 cm, fokusnya adalah...", opts: ["10 cm", "20 cm", "40 cm", "-10 cm", "-20 cm"], ans: 3, exp: "f = R/2. Cermin cembung bernilai negatif. f = -20/2 = -10 cm." },
+            { id: 13, cat: "Fisika", q: "Perpindahan panas tanpa perantara zat disebut...", opts: ["Konduksi", "Konveksi", "Radiasi", "Isolasi", "Evaporasi"], ans: 2, exp: "Radiasi adalah perpindahan panas melalui gelombang elektromagnetik (tanpa zat)." },
+            
+            // TPA & LOGIKA
+            { id: 14, cat: "TPA", q: "Semua dokter adalah pintar. Sebagian orang pintar adalah artis. Kesimpulan?", opts: ["Semua dokter adalah artis", "Sebagian dokter adalah artis", "Tidak dapat disimpulkan", "Semua artis adalah dokter", "Sebagian artis bukan dokter"], ans: 2, exp: "Hubungan antara 'dokter' dan 'artis' tidak dapat ditentukan secara pasti dari premis tersebut." },
+            { id: 15, cat: "TPA", q: "Deret angka: 2, 4, 8, 16, ...", opts: ["24", "30", "32", "36", "64"], ans: 2, exp: "Pola dikali 2. 16 x 2 = 32." },
+            { id: 16, cat: "TPA", q: "Kertas : Pohon = Kain : ...", opts: ["Benang", "Pakaian", "Kapuk", "Pabrik", "Jahit"], ans: 0, exp: "Kertas berasal dari pohon, Kain berasal dari benang/kapas." },
+            { id: 17, cat: "TPA", q: "Jika A > B dan B > C, maka...", opts: ["A < C", "A > C", "A = C", "B < C", "Tidak bisa ditentukan"], ans: 1, exp: "Sifat transitif: Jika A lebih besar dari B, dan B lebih besar dari C, maka A pasti lebih besar dari C." },
+            { id: 18, cat: "TPA", q: "Lawan kata dari 'Abstrak' adalah...", opts: ["Nyata", "Maya", "Ilusi", "Khayalan", "Impian"], ans: 0, exp: "Abstrak berarti tidak berwujud, lawan katanya adalah Nyata/Konkret." },
+            
+            // BAHASA INDONESIA
+            { id: 19, cat: "B. Indo", q: "Manakah penulisan yang benar sesuai PUEBI?", opts: ["Di rumah", "Dimana", "Disini", "Dipasar", "Kesekolah"], ans: 0, exp: "'Di' sebagai kata depan ditulis terpisah (Di rumah). Imbuhan digabung (Dimakan)." },
+            { id: 20, cat: "B. Indo", q: "Sinonim dari kata 'Efisien' adalah...", opts: ["Tepat guna", "Cepat", "Murah", "Hemat waktu", "Sederhana"], ans: 0, exp: "Efisien berarti tepat atau sesuai untuk mengerjakan sesuatu dengan tidak membuang-buang waktu/tenaga (tepat guna)." },
+            { id: 21, cat: "B. Indo", q: "Kalimat efektif harus memenuhi syarat, KECUALI...", opts: ["Kesepadanan", "Keparalelan", "Ketegasan", "Bertele-tele", "Kehematan"], ans: 3, exp: "Kalimat efektif tidak boleh bertele-tele (hemat kata)." },
+            
+            // BAHASA INGGRIS
+            { id: 22, cat: "B. Ing", q: "She ___ to the market yesterday.", opts: ["go", "goes", "went", "gone", "going"], ans: 2, exp: "Yesterday menunjukkan Past Tense, jadi menggunakan Verb 2 (went)." },
+            { id: 23, cat: "B. Ing", q: "If it rains, I ___ at home.", opts: ["stay", "will stay", "stayed", "would stay", "staying"], ans: 1, exp: "Conditional Sentence Type 1: If + Present, Future (will)." },
+            { id: 24, cat: "B. Ing", q: "The book is ___ the table.", opts: ["in", "at", "on", "to", "for"], ans: 2, exp: "Di atas meja menggunakan preposisi 'on'." },
+            { id: 25, cat: "B. Ing", q: "My father ___ a car now.", opts: ["wash", "washes", "is washing", "washed", "was washing"], ans: 2, exp: "'Now' menunjukkan Present Continuous Tense (is/am/are + V-ing)." },
+            
+            // PENGETAHUAN UMUM & SIBER
+            { id: 26, cat: "Umum", q: "CPU adalah singkatan dari...", opts: ["Central Processing Unit", "Computer Personal Unit", "Central Power Unit", "Control Processing Unit", "Central Program Utility"], ans: 0, exp: "CPU = Central Processing Unit." },
+            { id: 27, cat: "Umum", q: "Sistem bilangan yang hanya terdiri dari 0 dan 1 disebut...", opts: ["Desimal", "Oktal", "Hexadesimal", "Biner", "Romawi"], ans: 3, exp: "Sistem biner (basis 2) hanya menggunakan angka 0 dan 1." },
+            { id: 28, cat: "Umum", q: "RAM berfungsi untuk...", opts: ["Menyimpan data permanen", "Memproses grafis", "Menyimpan data sementara saat program berjalan", "Menghubungkan internet", "Mendinginkan prosesor"], ans: 2, exp: "RAM (Random Access Memory) adalah penyimpanan sementara yang volatil." },
+            { id: 29, cat: "Umum", q: "Protokol standar untuk transfer file adalah...", opts: ["HTTP", "FTP", "SMTP", "POP3", "SSH"], ans: 1, exp: "FTP (File Transfer Protocol) digunakan khusus untuk transfer file." },
+            { id: 30, cat: "Umum", q: "Malware yang mengunci file dan meminta tebusan disebut...", opts: ["Virus", "Worm", "Trojan", "Ransomware", "Spyware"], ans: 3, exp: "Ransomware melakukan enkripsi file korban dan meminta uang tebusan." },
+            { id: 31, cat: "Matematika", q: "Luas lingkaran dengan jari-jari 7 cm adalah... (π=22/7)", opts: ["154 cm²", "44 cm²", "144 cm²", "616 cm²", "22 cm²"], ans: 0, exp: "L = πr² = 22/7 × 7 × 7 = 154 cm²." },
+            { id: 32, cat: "Fisika", q: "Alat untuk mengukur kuat arus listrik adalah...", opts: ["Voltmeter", "Amperemeter", "Ohmmeter", "Barometer", "Termometer"], ans: 1, exp: "Amperemeter digunakan untuk mengukur kuat arus (I)." },
+            { id: 33, cat: "TPA", q: "Mobil : Bensin = Manusia : ...", opts: ["Makanan", "Jalan", "Rumah", "Sepatu", "Uang"], ans: 0, exp: "Mobil butuh bensin untuk bergerak, Manusia butuh makanan untuk energi." },
+            { id: 34, cat: "B. Ing", q: "I have lived here ___ 2010.", opts: ["since", "for", "during", "while", "ago"], ans: 0, exp: "'Since' diikuti titik waktu tertentu (2010)." },
+            { id: 35, cat: "Umum", q: "IP Address versi 4 terdiri dari berapa bit?", opts: ["32 bit", "64 bit", "128 bit", "16 bit", "8 bit"], ans: 0, exp: "IPv4 menggunakan 32-bit address." }
         ];
 
-        const FLASHCARDS_DATA = [
-            { id: 1, q: "Turunan dari f(x) = x³?", a: "f'(x) = 3x²", status: null },
-            { id: 2, q: "Apa itu Phishing?", a: "Upaya penipuan digital untuk mencuri data sensitif.", status: null },
-            { id: 3, q: "Rumus Gaya Lorentz?", a: "F = B · I · L · sin(θ)", status: null },
-            { id: 4, q: "Passive Voice dari 'I eat rice'?", a: "Rice is eaten by me.", status: null },
-        ];
-
-        const EXAM_QUESTIONS = [
-            {
-                id: 1,
-                text: "Jika log 2 = a dan log 3 = b, maka nilai dari log 18 adalah...",
-                options: ["2a + b", "a + 2b", "2a + 2b", "a + b", "3a + b"],
-                correct: 1, // Index of correct answer
-                explanation: "log 18 = log (2 · 3²) = log 2 + 2 log 3 = a + 2b."
-            },
-            {
-                id: 2,
-                text: "Sebuah benda bermassa 5 kg didorong dengan gaya 20 N di lantai licin. Berapa percepatan benda tersebut?",
-                options: ["2 m/s²", "4 m/s²", "5 m/s²", "10 m/s²", "100 m/s²"],
-                correct: 1,
-                explanation: "Gunakan Hukum II Newton: a = F/m = 20/5 = 4 m/s²."
-            },
-            {
-                id: 3,
-                text: "Semua administrator jaringan paham TCP/IP. Budi tidak paham TCP/IP. Kesimpulan yang tepat adalah...",
-                options: ["Budi administrator jaringan", "Budi bukan administrator jaringan", "Sebagian administrator bukan Budi", "Tidak dapat disimpulkan", "Budi belajar jaringan"],
-                correct: 1,
-                explanation: "Silogisme Modus Tollens: Jika A maka B. Tidak B, maka Tidak A."
-            }
-        ];
-
-        // --- ICONS COMPONENT WRAPPER ---
+        // --- ICON COMPONENT ---
         const Icon = ({ name, size = 20, className }) => {
-            useEffect(() => {
-                lucide.createIcons();
-            }, [name]);
+            useEffect(() => lucide.createIcons(), [name]);
             return <i data-lucide={name} width={size} height={size} className={className}></i>;
         };
 
-        // --- 1. MODULE: MATERI & CHEATSHEET ---
-        const MaterialModule = () => {
-            const [activeId, setActiveId] = useState(1);
-            const activeMaterial = MATERIALS.find(m => m.id === activeId);
-
-            return (
-                <div className="max-w-4xl mx-auto p-6 animate-fade-in">
-                    <div className="flex gap-4 mb-8 overflow-x-auto pb-2">
-                        {MATERIALS.map(m => (
-                            <button 
-                                key={m.id}
-                                onClick={() => setActiveId(m.id)}
-                                className={`px-4 py-2 rounded-full text-sm font-medium transition-all whitespace-nowrap ${activeId === m.id ? 'bg-blue-600 text-white shadow-lg' : 'bg-white text-slate-600 hover:bg-slate-100'}`}
-                            >
-                                {m.title}
-                            </button>
-                        ))}
-                    </div>
-
-                    <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-                        {/* Cheat Sheet Header */}
-                        <div className="bg-slate-900 text-white p-6">
-                            <div className="flex items-center gap-2 mb-4 text-blue-400">
-                                <Icon name="zap" size={18} />
-                                <span className="text-xs font-bold uppercase tracking-wider">Quick Cheat Sheet</span>
-                            </div>
-                            <div className="grid md:grid-cols-3 gap-4">
-                                {activeMaterial.cheatSheet.map((item, idx) => (
-                                    <div key={idx} className="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
-                                        <div className="text-xs text-slate-400 mb-1">{item.label}</div>
-                                        <div className="font-mono text-sm text-green-400">{item.value}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* Clean Reading Content */}
-                        <div className="p-8 prose prose-slate max-w-none">
-                            <h2 className="text-2xl font-bold text-slate-900 mb-4">{activeMaterial.title}</h2>
-                            <div dangerouslySetInnerHTML={{ __html: activeMaterial.content }}></div>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        // --- 2. MODULE: INTERACTIVE FLASHCARD ---
-        const FlashcardModule = () => {
-            const [index, setIndex] = useState(0);
-            const [isFlipped, setIsFlipped] = useState(false);
-            const [cards, setCards] = useState(FLASHCARDS_DATA);
-
-            const handleNext = () => {
-                setIsFlipped(false);
-                setTimeout(() => setIndex((prev) => (prev + 1) % cards.length), 200);
-            };
-
-            const handleEval = (status) => {
-                const newCards = [...cards];
-                newCards[index].status = status;
-                setCards(newCards);
-                handleNext();
-            };
-
-            const currentCard = cards[index];
-
-            return (
-                <div className="max-w-2xl mx-auto p-6 flex flex-col items-center justify-center min-h-[600px]">
-                    <div className="w-full flex justify-between items-center mb-6">
-                        <span className="text-slate-500 font-medium">Card {index + 1} of {cards.length}</span>
-                        <div className="flex gap-2">
-                            <span className="w-3 h-3 rounded-full bg-green-500"></span>
-                            <span className="w-3 h-3 rounded-full bg-red-500"></span>
-                        </div>
-                    </div>
-
-                    {/* Card Container */}
-                    <div 
-                        className="perspective-1000 w-full h-80 cursor-pointer group"
-                        onClick={() => setIsFlipped(!isFlipped)}
-                    >
-                        <div className={`relative w-full h-full transition-transform duration-500 transform-style-3d ${isFlipped ? 'rotate-y-180' : ''}`}>
-                            
-                            {/* Front */}
-                            <div className="absolute w-full h-full backface-hidden bg-white rounded-2xl shadow-xl border border-slate-200 flex flex-col items-center justify-center p-8 text-center">
-                                <div className="absolute top-4 right-4 text-slate-300"><Icon name="rotate-cw" /></div>
-                                <h3 className="text-xl font-semibold text-slate-800">{currentCard.q}</h3>
-                                <p className="mt-4 text-sm text-slate-400">Klik untuk melihat jawaban</p>
-                            </div>
-
-                            {/* Back */}
-                            <div className="absolute w-full h-full backface-hidden bg-blue-600 rounded-2xl shadow-xl rotate-y-180 flex flex-col items-center justify-center p-8 text-center text-white">
-                                <h3 className="text-xl font-medium">{currentCard.a}</h3>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Controls */}
-                    <div className="mt-8 flex gap-4 w-full">
-                        <button onClick={() => handleEval('bad')} className="flex-1 py-3 rounded-xl border-2 border-red-100 text-red-600 font-semibold hover:bg-red-50 transition-colors flex items-center justify-center gap-2">
-                            <Icon name="x-circle" size={18} /> Belum Paham
-                        </button>
-                        <button onClick={() => handleEval('good')} className="flex-1 py-3 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 shadow-lg shadow-blue-200 transition-all flex items-center justify-center gap-2">
-                            <Icon name="check-circle" size={18} /> Paham
-                        </button>
-                    </div>
-                </div>
-            );
-        };
-
-        // --- 3. MODULE: TRY OUT & SIMULASI ---
-        const ExamModule = () => {
-            const [status, setStatus] = useState('intro'); // intro, active, result
-            const [answers, setAnswers] = useState({});
-            const [timeLeft, setTimeLeft] = useState(600); // 10 minutes in seconds
-
-            useEffect(() => {
-                let timer;
-                if (status === 'active' && timeLeft > 0) {
-                    timer = setInterval(() => setTimeLeft(t => t - 1), 1000);
-                } else if (timeLeft === 0) {
-                    setStatus('result');
-                }
-                return () => clearInterval(timer);
-            }, [status, timeLeft]);
-
-            const formatTime = (seconds) => {
-                const m = Math.floor(seconds / 60);
-                const s = seconds % 60;
-                return `${m}:${s < 10 ? '0' : ''}${s}`;
-            };
-
-            if (status === 'intro') {
-                return (
-                    <div className="max-w-2xl mx-auto p-6 text-center mt-10">
-                        <div className="bg-white p-8 rounded-2xl shadow-lg border border-slate-100">
-                            <div className="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                                <Icon name="timer" size={32} />
-                            </div>
-                            <h2 className="text-2xl font-bold mb-2">Simulasi Ujian Masuk</h2>
-                            <p className="text-slate-500 mb-6">Durasi: 10 Menit | Jumlah Soal: 3</p>
-                            <ul className="text-left text-sm text-slate-600 space-y-2 mb-8 bg-slate-50 p-4 rounded-lg">
-                                <li className="flex items-center gap-2"><Icon name="check" size={16} className="text-green-500"/> Gunakan kalkulator secukupnya.</li>
-                                <li className="flex items-center gap-2"><Icon name="check" size={16} className="text-green-500"/> Fokus pada ketelitian membaca soal.</li>
-                            </ul>
-                            <button onClick={() => setStatus('active')} className="w-full py-3 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition-all">
-                                Mulai Ujian Sekarang
-                            </button>
-                        </div>
-                    </div>
-                );
-            }
-
-            if (status === 'result') {
-                let score = 0;
-                EXAM_QUESTIONS.forEach(q => {
-                    if (answers[q.id] === q.correct) score += 1;
-                });
-
-                return (
-                    <div className="max-w-4xl mx-auto p-6">
-                        <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-8 mb-6 text-center">
-                            <h2 className="text-3xl font-bold text-slate-800 mb-2">Skor Kamu: {Math.round((score/EXAM_QUESTIONS.length)*100)}</h2>
-                            <p className="text-slate-500">Benar: {score} | Salah: {EXAM_QUESTIONS.length - score}</p>
-                            <button onClick={() => window.location.reload()} className="mt-4 px-6 py-2 bg-slate-100 text-slate-700 rounded-lg font-medium hover:bg-slate-200">
-                                Kembali ke Dashboard
-                            </button>
-                        </div>
-
-                        <div className="space-y-4">
-                            {EXAM_QUESTIONS.map((q, idx) => {
-                                const isCorrect = answers[q.id] === q.correct;
-                                return (
-                                    <div key={q.id} className={`bg-white rounded-xl p-6 border-l-4 ${isCorrect ? 'border-green-500' : 'border-red-500'} shadow-sm`}>
-                                        <div className="flex gap-4">
-                                            <span className="font-bold text-slate-400">#{idx + 1}</span>
-                                            <div className="flex-1">
-                                                <p className="font-medium text-slate-800 mb-4">{q.text}</p>
-                                                <div className="bg-slate-50 p-4 rounded-lg text-sm text-slate-600 mb-2">
-                                                    <span className="font-bold text-blue-600 block mb-1">💡 Cara Cepat / Pembahasan:</span>
-                                                    {q.explanation}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )
-                            })}
-                        </div>
-                    </div>
-                );
-            }
-
-            // Active Exam View
-            return (
-                <div className="h-[calc(100vh-80px)] flex flex-col md:flex-row overflow-hidden bg-slate-100">
-                    {/* Left: Question Area */}
-                    <div className="flex-1 overflow-y-auto p-6 md:p-10">
-                        <div className="max-w-3xl mx-auto">
-                            <span className="text-xs font-bold text-blue-600 uppercase tracking-wide mb-2 block">Soal No. 1</span>
-                            <h3 className="text-xl md:text-2xl font-medium text-slate-800 leading-relaxed mb-8">
-                                {EXAM_QUESTIONS[0].text}
-                            </h3>
-                            
-                            <div className="space-y-3">
-                                {EXAM_QUESTIONS[0].options.map((opt, idx) => (
-                                    <label key={idx} className={`flex items-center p-4 rounded-xl border-2 cursor-pointer transition-all ${answers[1] === idx ? 'border-blue-600 bg-blue-50' : 'border-slate-200 bg-white hover:border-blue-300'}`}>
-                                        <input 
-                                            type="radio" 
-                                            name="q1" 
-                                            className="hidden" 
-                                            onChange={() => setAnswers({...answers, 1: idx})}
-                                        />
-                                        <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold mr-4 ${answers[1] === idx ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-500'}`}>
-                                            {String.fromCharCode(65 + idx)}
-                                        </span>
-                                        <span className="text-slate-700">{opt}</span>
-                                    </label>
-                                ))}
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Right: Sidebar Navigation */}
-                    <div className="w-full md:w-80 bg-white border-l border-slate-200 flex flex-col">
-                        <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                            <span className="font-bold text-slate-700">Waktu Tersisa</span>
-                            <span className={`font-mono text-xl font-bold ${timeLeft < 60 ? 'text-red-600 animate-pulse' : 'text-slate-800'}`}>
-                                {formatTime(timeLeft)}
-                            </span>
-                        </div>
-                        
-                        <div className="p-6 flex-1 overflow-y-auto">
-                            <h4 className="text-xs font-bold text-slate-400 uppercase mb-4">Navigasi Soal</h4>
-                            <div className="grid grid-cols-5 gap-3">
-                                {EXAM_QUESTIONS.map((q, idx) => (
-                                    <button key={q.id} className={`aspect-square rounded-lg text-sm font-bold transition-all ${answers[q.id] !== undefined ? 'bg-blue-600 text-white' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}`}>
-                                        {idx + 1}
-                                    </button>
-                                ))}
-                            </div>
-                        </div>
-
-                        <div className="p-6 border-t border-slate-100">
-                            <button 
-                                onClick={() => setStatus('result')}
-                                className="w-full py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all flex items-center justify-center gap-2"
-                            >
-                                Selesai Ujian <Icon name="arrow-right" size={18} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            );
-        };
-
-        // --- MAIN APP LAYOUT ---
+        // --- MAIN APP ---
         const App = () => {
-            const [activeTab, setActiveTab] = useState('materi');
+            const [view, setView] = useState('exam'); // Langsung ke exam
+            const [answers, setAnswers] = useState({});
+            const [currentQIndex, setCurrentQIndex] = useState(0);
+            const [timeLeft, setTimeLeft] = useState(180 * 60); // 180 Menit
+            const [isFinished, setIsFinished] = useState(false);
 
-            return (
-                <div className="min-h-screen flex flex-col">
-                    {/* Navbar */}
-                    <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                            <div className="flex justify-between h-16">
-                                <div className="flex items-center gap-2">
-                                    <div className="bg-blue-600 p-2 rounded-lg text-white">
-                                        <Icon name="graduation-cap" size={24} />
-                                    </div>
-                                    <span className="font-bold text-xl tracking-tight text-slate-900">EduPrep<span className="text-blue-600">Pro</span></span>
+            // Timer Logic
+            useEffect(() => {
+                if (!isFinished && timeLeft > 0) {
+                    const timer = setInterval(() => setTimeLeft(t => t - 1), 1000);
+                    return () => clearInterval(timer);
+                } else if (timeLeft === 0) {
+                    setIsFinished(true);
+                }
+            }, [isFinished, timeLeft]);
+
+            const formatTime = (sec) => {
+                const h = Math.floor(sec / 3600);
+                const m = Math.floor((sec % 3600) / 60);
+                const s = sec % 60;
+                return `${h}:${m < 10 ? '0'+m : m}:${s < 10 ? '0'+s : s}`;
+            };
+
+            const handleAnswer = (qId, optIndex) => {
+                setAnswers(prev => ({ ...prev, [qId]: optIndex }));
+            };
+
+            const calculateScore = () => {
+                let correct = 0;
+                QUESTION_BANK.forEach(q => {
+                    if (answers[q.id] === q.ans) correct++;
+                });
+                return Math.round((correct / QUESTION_BANK.length) * 100);
+            };
+
+            // --- VIEW: EXAM INTERFACE ---
+            if (!isFinished) {
+                const currentQ = QUESTION_BANK[currentQIndex];
+                
+                return (
+                    <div className="flex flex-col md:flex-row h-screen bg-slate-50">
+                        {/* LEFT: QUESTION AREA */}
+                        <div className="flex-1 flex flex-col h-full overflow-hidden">
+                            {/* Header Mobile/Desktop */}
+                            <div className="bg-white border-b p-4 flex justify-between items-center shadow-sm z-10">
+                                <div>
+                                    <span className="text-xs font-bold text-blue-600 uppercase tracking-wider block">{currentQ.cat}</span>
+                                    <h2 className="font-bold text-slate-800">Soal No. {currentQIndex + 1}</h2>
                                 </div>
-                                <div className="hidden md:flex space-x-8">
-                                    {[
-                                        { id: 'materi', label: 'Materi & Rumus', icon: 'book-open' },
-                                        { id: 'flashcard', label: 'Flashcard', icon: 'layers' },
-                                        { id: 'exam', label: 'Try Out', icon: 'pen-tool' }
-                                    ].map(tab => (
+                                <div className={`font-mono font-bold text-lg px-3 py-1 rounded ${timeLeft < 300 ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-slate-100 text-slate-700'}`}>
+                                    {formatTime(timeLeft)}
+                                </div>
+                            </div>
+
+                            {/* Scrollable Content */}
+                            <div className="flex-1 overflow-y-auto p-6 md:p-10">
+                                <div className="max-w-3xl mx-auto bg-white p-8 rounded-2xl shadow-sm border border-slate-100 min-h-[400px]">
+                                    <p className="text-lg md:text-xl font-medium text-slate-800 leading-relaxed mb-8">
+                                        {currentQ.q}
+                                    </p>
+                                    
+                                    <div className="space-y-3">
+                                        {currentQ.opts.map((opt, idx) => (
+                                            <label 
+                                                key={idx} 
+                                                className={`flex items-start p-4 rounded-xl border-2 cursor-pointer transition-all group ${answers[currentQ.id] === idx ? 'border-blue-600 bg-blue-50' : 'border-slate-200 hover:border-blue-300 hover:bg-slate-50'}`}
+                                            >
+                                                <input 
+                                                    type="radio" 
+                                                    name={`q-${currentQ.id}`} 
+                                                    className="mt-1 mr-4 accent-blue-600 w-5 h-5"
+                                                    checked={answers[currentQ.id] === idx}
+                                                    onChange={() => handleAnswer(currentQ.id, idx)}
+                                                />
+                                                <span className="text-slate-700 group-hover:text-slate-900">{opt}</span>
+                                            </label>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Footer Navigation */}
+                            <div className="bg-white border-t p-4 flex justify-between items-center">
+                                <button 
+                                    onClick={() => setCurrentQIndex(prev => Math.max(0, prev - 1))}
+                                    disabled={currentQIndex === 0}
+                                    className="px-6 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-100 disabled:opacity-50 flex items-center gap-2"
+                                >
+                                    <Icon name="chevron-left" /> Sebelumnya
+                                </button>
+                                <button 
+                                    onClick={() => setCurrentQIndex(prev => Math.min(QUESTION_BANK.length - 1, prev + 1))}
+                                    disabled={currentQIndex === QUESTION_BANK.length - 1}
+                                    className="px-6 py-2 rounded-lg font-medium text-slate-600 hover:bg-slate-100 disabled:opacity-50 flex items-center gap-2"
+                                >
+                                    Selanjutnya <Icon name="chevron-right" />
+                                </button>
+                            </div>
+                        </div>
+
+                        {/* RIGHT: NAVIGATION GRID */}
+                        <div className="w-full md:w-80 bg-white border-l border-slate-200 flex flex-col h-1/3 md:h-full">
+                            <div className="p-4 border-b bg-slate-50">
+                                <h3 className="font-bold text-slate-700 text-sm uppercase">Navigasi Soal</h3>
+                                <p className="text-xs text-slate-500 mt-1">Terjawab: {Object.keys(answers).length} / {QUESTION_BANK.length}</p>
+                            </div>
+                            <div className="flex-1 overflow-y-auto p-4">
+                                <div className="grid grid-cols-5 gap-2">
+                                    {QUESTION_BANK.map((q, idx) => (
                                         <button
-                                            key={tab.id}
-                                            onClick={() => setActiveTab(tab.id)}
-                                            className={`inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium transition-colors ${activeTab === tab.id ? 'border-blue-600 text-blue-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'}`}
+                                            key={q.id}
+                                            onClick={() => setCurrentQIndex(idx)}
+                                            className={`aspect-square rounded-lg text-sm font-bold transition-all flex items-center justify-center relative
+                                                ${currentQIndex === idx ? 'ring-2 ring-offset-2 ring-blue-500 ' : ''}
+                                                ${answers[q.id] !== undefined ? 'bg-blue-600 text-white shadow-md' : 'bg-slate-100 text-slate-500 hover:bg-slate-200'}
+                                            `}
                                         >
-                                            <Icon name={tab.icon} size={16} className="mr-2" />
-                                            {tab.label}
+                                            {idx + 1}
                                         </button>
                                     ))}
                                 </div>
                             </div>
+                            <div className="p-4 border-t bg-slate-50">
+                                <button 
+                                    onClick={() => setIsFinished(true)}
+                                    className="w-full py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg flex items-center justify-center gap-2"
+                                >
+                                    <Icon name="check-circle" size={18} /> Selesai & Lihat Nilai
+                                </button>
+                            </div>
                         </div>
-                    </nav>
+                    </div>
+                );
+            }
 
-                    {/* Main Content Area */}
-                    <main className="flex-1 bg-slate-50">
-                        {activeTab === 'materi' && <MaterialModule />}
-                        {activeTab === 'flashcard' && <FlashcardModule />}
-                        {activeTab === 'exam' && <ExamModule />}
-                    </main>
-
-                    {/* Mobile Nav (Bottom) */}
-                    <div className="md:hidden fixed bottom-0 w-full bg-white border-t border-slate-200 flex justify-around p-3 z-50">
-                         {[
-                            { id: 'materi', icon: 'book-open' },
-                            { id: 'flashcard', icon: 'layers' },
-                            { id: 'exam', icon: 'pen-tool' }
-                        ].map(tab => (
-                            <button 
-                                key={tab.id} 
-                                onClick={() => setActiveTab(tab.id)}
-                                className={`p-2 rounded-lg ${activeTab === tab.id ? 'text-blue-600 bg-blue-50' : 'text-slate-400'}`}
-                            >
-                                <Icon name={tab.icon} size={24} />
+            // --- VIEW: RESULT ---
+            const score = calculateScore();
+            return (
+                <div className="min-h-screen bg-slate-50 p-4 md:p-8 overflow-y-auto">
+                    <div className="max-w-4xl mx-auto">
+                        <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 text-center border-t-8 border-blue-600">
+                            <h1 className="text-3xl font-bold text-slate-800 mb-2">Hasil Try Out</h1>
+                            <div className="text-6xl font-black text-blue-600 my-6">{score}</div>
+                            <p className="text-slate-500 mb-6">Benar: {Object.keys(answers).filter(id => answers[id] === QUESTION_BANK.find(q=>q.id==id).ans).length} | Salah: {QUESTION_BANK.length - Object.keys(answers).filter(id => answers[id] === QUESTION_BANK.find(q=>q.id==id).ans).length}</p>
+                            <button onClick={() => window.location.reload()} className="px-8 py-3 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800">
+                                Ulangi Ujian
                             </button>
-                        ))}
+                        </div>
+
+                        <div className="space-y-4">
+                            {QUESTION_BANK.map((q, idx) => {
+                                const isCorrect = answers[q.id] === q.ans;
+                                return (
+                                    <div key={q.id} className={`bg-white rounded-xl p-6 border-l-4 shadow-sm ${isCorrect ? 'border-green-500' : 'border-red-500'}`}>
+                                        <div className="flex gap-4">
+                                            <div className="font-bold text-slate-300 text-lg">#{idx + 1}</div>
+                                            <div className="flex-1">
+                                                <div className="flex justify-between items-start mb-2">
+                                                    <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded">{q.cat}</span>
+                                                    {isCorrect ? <Icon name="check-circle" className="text-green-500" /> : <Icon name="x-circle" className="text-red-500" />}
+                                                </div>
+                                                <p className="font-medium text-slate-800 mb-4 text-lg">{q.q}</p>
+                                                
+                                                <div className="bg-slate-50 p-4 rounded-lg text-sm text-slate-700 mb-2">
+                                                    <strong>Jawaban Kamu:</strong> {answers[q.id] !== undefined ? q.opts[answers[q.id]] : "Tidak dijawab"}
+                                                </div>
+                                                
+                                                {!isCorrect && (
+                                                    <div className="bg-green-50 p-4 rounded-lg text-sm text-green-800 mb-2 border border-green-100">
+                                                        <strong>Kunci Jawaban:</strong> {q.opts[q.ans]}
+                                                    </div>
+                                                )}
+
+                                                <div className="mt-4 pt-4 border-t border-slate-100">
+                                                    <p className="text-sm font-bold text-slate-900 mb-1 flex items-center gap-2">
+                                                        <Icon name="lightbulb" size={16} className="text-yellow-500" /> Pembahasan:
+                                                    </p>
+                                                    <p className="text-sm text-slate-600 leading-relaxed">{q.exp}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
                     </div>
                 </div>
             );
